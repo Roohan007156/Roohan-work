@@ -296,7 +296,7 @@ try:
                     Latest Load
                 </div>
                 <div class="kpi-value">
-                    {current_load:.1f} kW
+                    {current_load:1f} kW
                 </div>
             </div>
             """,
