@@ -33,7 +33,7 @@ body {
 
 /* Main title */
 .main-title {
-    color: #111827 !important;
+    color: #000000; !important;
     font-weight: 800 !important;
     font-size: 42px !important;
 }
@@ -47,21 +47,21 @@ body {
 
 /* Section headings */
 .section-title {
-    color: #111827 !important;
+    color: #000000; !important;
     font-weight: 800 !important;
     font-size: 24px !important;
 }
 
 /* KPI title */
 .kpi-title {
-    color: #374151 !important;
+    color: #1f2937; !important;
     font-weight: 700 !important;
     font-size: 14px !important;
 }
 
 /* KPI value */
 .kpi-value {
-    color: #111827 !important;
+    color: #000000; !important;
     font-weight: 800 !important;
     font-size: 30px !important;
 }
@@ -71,17 +71,17 @@ body {
 .stText,
 p,
 label {
-    color: #374151 !important;
+    color: #1f2937; !important;
 }
 
 /* Metric text */
 [data-testid="stMetricLabel"] {
-    color: #374151 !important;
+    color: #1f2937; !important;
     font-weight: 700 !important;
 }
 
 [data-testid="stMetricValue"] {
-    color: #111827 !important;
+    color: #000000; !important;
     font-weight: 800 !important;
 }
 
