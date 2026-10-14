@@ -631,7 +631,173 @@ try:
         hide_index=True,
     )
 
+    # -----------------------------------------------------
+# STAGE 5 - FORECAST SUMMARY
+# -----------------------------------------------------
 
+forecast_peak = float(
+    forecast_df["Predicted_Demand_kW"].max()
+)
+
+forecast_minimum = float(
+    forecast_df["Predicted_Demand_kW"].min()
+)
+
+forecast_average = float(
+    forecast_df["Predicted_Demand_kW"].mean()
+)
+
+forecast_energy = float(
+    forecast_df["Predicted_Demand_kW"].sum()
+)
+
+peak_index = forecast_df[
+    "Predicted_Demand_kW"
+].idxmax()
+
+forecast_peak_time = forecast_df.loc[
+    peak_index,
+    "Timestamp"
+]
+
+forecast_peak_time_string = (
+    forecast_peak_time.strftime("%H:%M")
+)
+
+# -----------------------------------------------------
+# FORECAST DASHBOARD
+# -----------------------------------------------------
+
+st.markdown(
+    '<div class="section-title">'
+    '🔮 Campus Demand Forecast'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+st.write(
+    "Machine-learning prediction of campus electricity "
+    "demand for the next 24 hours."
+)
+
+st.info(
+    f"Forecast model selected automatically: **{best_name}**"
+)
+
+fc1, fc2, fc3 = st.columns(3)
+
+with fc1:
+
+    st.metric(
+        "Peak Demand",
+        f"{forecast_peak:.1f} kW"
+    )
+
+with fc2:
+
+    st.metric(
+        "Peak Hour",
+        forecast_peak_time_string
+    )
+
+with fc3:
+
+    st.metric(
+        "Average Demand",
+        f"{forecast_average:.1f} kW"
+    )
+
+
+fc4, fc5, fc6 = st.columns(3)
+
+with fc4:
+
+    st.metric(
+        "Minimum Demand",
+        f"{forecast_minimum:.1f} kW"
+    )
+
+with fc5:
+
+    st.metric(
+        "Forecast Energy",
+        f"{forecast_energy:,.0f} kWh"
+    )
+
+with fc6:
+
+    st.metric(
+        "Model MAPE",
+        f"{model_mape:.2f}%"
+    )
+
+    st.markdown(
+    '<div class="section-title">'
+    '24-Hour Demand Forecast'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+forecast_chart = forecast_df.set_index(
+    "Timestamp"
+)[["Predicted_Demand_kW"]]
+
+st.line_chart(
+    forecast_chart,
+    use_container_width=True,
+)
+
+st.markdown(
+    "### Hour-by-Hour Forecast"
+)
+
+display_forecast = forecast_df.copy()
+
+display_forecast["Timestamp"] = (
+    display_forecast["Timestamp"]
+    .dt.strftime("%Y-%m-%d %H:%M")
+)
+
+display_forecast["Predicted_Demand_kW"] = (
+    display_forecast["Predicted_Demand_kW"]
+    .round(2)
+)
+
+st.dataframe(
+    display_forecast,
+    use_container_width=True,
+    hide_index=True,
+)
+
+# -----------------------------------------------------
+# FORECAST STATUS
+# -----------------------------------------------------
+
+historical_peak = float(
+    df["Load_kW"].max()
+)
+
+if forecast_peak >= historical_peak * 0.95:
+
+    st.warning(
+        "⚠️ Forecast peak is close to the historical "
+        "maximum demand."
+    )
+
+elif forecast_peak >= historical_peak * 0.80:
+
+    st.info(
+        "ℹ️ Forecast peak is moderately high compared "
+        "with historical demand."
+    )
+
+else:
+
+    st.success(
+        "✅ Forecast demand is within the normal "
+        "historical range."
+    )
+                 
     # -----------------------------------------------------
     # DOWNLOAD
     # -----------------------------------------------------
@@ -654,3 +820,4 @@ except Exception as exc:
         "The application could not process this dataset."
     )
     st.exception(exc)
+
