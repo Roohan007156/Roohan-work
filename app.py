@@ -467,54 +467,53 @@ try:
 # STAGE 4 - ELECTRICITY DEMAND HISTORY
 # -----------------------------------------------------
 
-st.markdown(
+ st.markdown(
     '<div class="section-title">'
     '📈 Electricity Demand History'
     '</div>',
     unsafe_allow_html=True,
-)
+ )
 
-st.write(
+ st.write(
     "Explore historical campus electricity demand "
     "over different time periods."
-)
+ )
 
 
-# -----------------------------------------------------
-# HISTORY PERIOD SELECTOR
-# -----------------------------------------------------
+ # -----------------------------------------------------
+ # HISTORY PERIOD SELECTOR
+ # -----------------------------------------------------
 
-history_period = st.radio(
+ history_period = st.radio(
     "Select history period",
     ["24 Hours", "7 Days", "30 Days"],
     horizontal=True,
-)
+ )
 
+ # -----------------------------------------------------
+ # FILTER DATA
+ # -----------------------------------------------------
 
-# -----------------------------------------------------
-# FILTER DATA
-# -----------------------------------------------------
+ history_df = df.copy()
 
-history_df = df.copy()
+ latest_timestamp = history_df["Timestamp"].max()
 
-latest_timestamp = history_df["Timestamp"].max()
-
-if history_period == "24 Hours":
+ if history_period == "24 Hours":
 
     start_time = latest_timestamp - pd.Timedelta(hours=24)
 
-elif history_period == "7 Days":
+ elif history_period == "7 Days":
 
     start_time = latest_timestamp - pd.Timedelta(days=7)
 
-else:
+ else:
 
     start_time = latest_timestamp - pd.Timedelta(days=30)
 
 
-history_df = history_df[
-    history_df["Timestamp"] >= start_time
-].copy()
+ history_df = history_df[
+     history_df["Timestamp"] >= start_time
+ ].copy()
 
 
 # -----------------------------------------------------
