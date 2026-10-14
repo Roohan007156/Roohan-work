@@ -109,13 +109,31 @@ st.markdown(
         font-weight: 800 !important;
     }
 
-    section[data-testid="stSidebar"] p,
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 {
-        color: #1f2937 !important;
-    }
+   /* SIDEBAR VISIBILITY */
+section[data-testid="stSidebar"] {
+    background-color: #1f2937 !important;
+   }
 
+  section[data-testid="stSidebar"] p,
+  section[data-testid="stSidebar"] label,
+  section[data-testid="stSidebar"] h1,
+  section[data-testid="stSidebar"] h2,
+  section[data-testid="stSidebar"] h3,
+  section[data-testid="stSidebar"] h4,
+  section[data-testid="stSidebar"] span,
+  section[data-testid="stSidebar"] div {
+      color: #ffffff !important;
+  }
+
+   /* Sidebar checkbox text */
+   section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+      color: #ffffff !important;
+  }
+
+   /* Sidebar uploader text */
+   section[data-testid="stSidebar"] [data-testid="stFileUploader"] {
+      color: #ffffff !important;
+  }
     div.stButton > button {
         color: #111827 !important;
         background-color: #ffffff !important;
