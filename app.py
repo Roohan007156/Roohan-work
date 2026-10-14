@@ -463,24 +463,168 @@ try:
             f"{len(df):,}",
         )
 
-    # -----------------------------------------------------
-    # ACTUAL DEMAND
-    # -----------------------------------------------------
+# -----------------------------------------------------
+# STAGE 4 - ELECTRICITY DEMAND HISTORY
+# -----------------------------------------------------
 
-    st.markdown(
-        '<div class="section-title">'
-        'Electricity Demand History'
-        '</div>',
-        unsafe_allow_html=True,
+st.markdown(
+    '<div class="section-title">'
+    '📈 Electricity Demand History'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+st.write(
+    "Explore historical campus electricity demand "
+    "over different time periods."
+)
+
+
+# -----------------------------------------------------
+# HISTORY PERIOD SELECTOR
+# -----------------------------------------------------
+
+history_period = st.radio(
+    "Select history period",
+    ["24 Hours", "7 Days", "30 Days"],
+    horizontal=True,
+)
+
+
+# -----------------------------------------------------
+# FILTER DATA
+# -----------------------------------------------------
+
+history_df = df.copy()
+
+latest_timestamp = history_df["Timestamp"].max()
+
+if history_period == "24 Hours":
+
+    start_time = latest_timestamp - pd.Timedelta(hours=24)
+
+elif history_period == "7 Days":
+
+    start_time = latest_timestamp - pd.Timedelta(days=7)
+
+else:
+
+    start_time = latest_timestamp - pd.Timedelta(days=30)
+
+
+history_df = history_df[
+    history_df["Timestamp"] >= start_time
+].copy()
+
+
+# -----------------------------------------------------
+# HISTORY KPIs
+# -----------------------------------------------------
+
+history_peak = float(
+    history_df["Load_kW"].max()
+)
+
+history_minimum = float(
+    history_df["Load_kW"].min()
+)
+
+history_average = float(
+    history_df["Load_kW"].mean()
+)
+
+history_energy = float(
+    history_df["Load_kW"].sum()
+)
+
+
+h1, h2, h3, h4 = st.columns(4)
+
+
+with h1:
+
+    st.metric(
+        "Peak Demand",
+        f"{history_peak:.1f} kW"
     )
 
-    history_chart = df.set_index(
-        "Timestamp"
-    )[["Load_kW"]]
 
-    st.line_chart(
-        history_chart,
+with h2:
+
+    st.metric(
+        "Minimum Demand",
+        f"{history_minimum:.1f} kW"
+    )
+
+
+with h3:
+
+    st.metric(
+        "Average Demand",
+        f"{history_average:.1f} kW"
+    )
+
+
+with h4:
+
+    st.metric(
+        "Energy",
+        f"{history_energy:,.0f} kWh"
+    )
+
+
+# -----------------------------------------------------
+# DEMAND HISTORY CHART
+# -----------------------------------------------------
+
+history_chart = history_df.set_index(
+    "Timestamp"
+)[["Load_kW"]]
+
+
+st.line_chart(
+    history_chart,
+    use_container_width=True,
+)
+
+
+# -----------------------------------------------------
+# WEATHER HISTORY
+# -----------------------------------------------------
+
+st.markdown(
+    '<div class="section-title">'
+    '🌡️ Load & Weather'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+weather_chart = history_df.set_index(
+    "Timestamp"
+)[
+    [
+        "Temperature_C",
+        "Humidity_pct",
+    ]
+]
+
+
+st.line_chart(
+    weather_chart,
+    use_container_width=True,
+)
+
+
+# -----------------------------------------------------
+# HISTORY DATA TABLE
+# -----------------------------------------------------
+
+with st.expander("View historical data"):
+
+    st.dataframe(
+        history_df,
         use_container_width=True,
+        hide_index=True,
     )
 
     # -----------------------------------------------------
