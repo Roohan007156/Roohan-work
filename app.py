@@ -26,6 +26,68 @@ st.markdown(
     """
     <style>
 
+     /* Main background */
+    .stApp {
+        background-color: #f5f7fb;
+    }
+
+    /* Main title */
+    .main-title {
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 0px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    /* KPI cards */
+    .kpi-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 10px;
+    }
+
+    .kpi-title {
+        font-size: 14px;
+        color: #666;
+        font-weight: 600;
+    }
+
+    .kpi-value {
+        font-size: 28px;
+        font-weight: 800;
+        margin-top: 5px;
+    }
+
+    /* Section headings */
+    .section-title {
+        font-size: 25px;
+        font-weight: 750;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    /* Info box */
+    .info-box {
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #e5e7eb;
+        margin-bottom: 20px;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
    /* Main page text */
 body {
     color: #1f2937 !important;
@@ -33,7 +95,7 @@ body {
 
 /* Main title */
 .main-title {
-    color: #000000; !important;
+    color: #000000 !important;
     font-weight: 800 !important;
     font-size: 42px !important;
 }
@@ -47,21 +109,21 @@ body {
 
 /* Section headings */
 .section-title {
-    color: #000000; !important;
+    color: #000000 !important;
     font-weight: 800 !important;
     font-size: 24px !important;
 }
 
 /* KPI title */
 .kpi-title {
-    color: #1f2937; !important;
+    color: #1f2937 !important;
     font-weight: 700 !important;
     font-size: 14px !important;
 }
 
 /* KPI value */
 .kpi-value {
-    color: #000000; !important;
+    color: #000000 !important;
     font-weight: 800 !important;
     font-size: 30px !important;
 }
@@ -71,17 +133,17 @@ body {
 .stText,
 p,
 label {
-    color: #1f2937; !important;
+    color: #1f2937 !important;
 }
 
 /* Metric text */
 [data-testid="stMetricLabel"] {
-    color: #1f2937; !important;
+    color: #1f2937 !important;
     font-weight: 700 !important;
 }
 
 [data-testid="stMetricValue"] {
-    color: #000000; !important;
+    color: #000000 !important;
     font-weight: 800 !important;
 }
 
