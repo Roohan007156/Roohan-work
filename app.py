@@ -37,19 +37,24 @@ with st.sidebar:
     )
 
 uploaded_file = st.file_uploader(
-    "Upload your hourly electricity-demand CSV",
+    "Upload another hourly electricity-demand CSV (optional)",
     type=["csv"],
 )
 
-if uploaded_file is None:
-    st.info(
-        "Upload a CSV file to start. The dataset should contain at least 8 days "
-        "of hourly data; several weeks or months are recommended."
-    )
-    st.stop()
-
 try:
-    raw = pd.read_csv(uploaded_file)
+    if uploaded_file is not None:
+        raw = pd.read_csv(uploaded_file)
+        data_source = "Uploaded CSV"
+    else:
+        raw = pd.read_csv("campus_electricity_2years.csv")
+        data_source = "Campus 2-Year Dataset"
+
+    df = normalise_dataset(raw)
+
+    st.success(
+        f"Using **{data_source}** — loaded {len(df):,} hourly records from "
+        f"{df['Timestamp'].min()} to {df['Timestamp'].max()}."
+    )
     df = normalise_dataset(raw)
 
     st.success(
@@ -59,7 +64,7 @@ try:
 
     with st.expander("View uploaded data"):
         st.dataframe(df.tail(20), use_container_width=True)
-
+        
     with st.spinner("Training Random Forest and Gradient Boosting models..."):
         report_df, best_name, final_models, validation = train_and_compare(df)
 
