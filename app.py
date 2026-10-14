@@ -238,107 +238,189 @@ try:
         report_df, best_name, final_models, validation = (
             train_and_compare(df)
         )
+        
+# -----------------------------------------------------
+# KPI CALCULATIONS
+# -----------------------------------------------------
 
-    # -----------------------------------------------------
-    # KPI CALCULATIONS
-    # -----------------------------------------------------
+current_load = float(
+    df["Load_kW"].iloc[-1]
+)
 
-    current_load = float(
-        df["Load_kW"].iloc[-1]
-    )
+average_load = float(
+    df["Load_kW"].mean()
+)
 
-    average_load = float(
-        df["Load_kW"].mean()
-    )
+maximum_load = float(
+    df["Load_kW"].max()
+)
 
-    maximum_load = float(
-        df["Load_kW"].max()
-    )
+minimum_load = float(
+    df["Load_kW"].min()
+)
 
-    minimum_load = float(
-        df["Load_kW"].min()
-    )
+# -----------------------------------------------------
+# CREATE 24-HOUR FORECAST
+# -----------------------------------------------------
 
-    best_row = report_df[
-        report_df["Model"] == best_name
-    ].iloc[0]
+best_model = final_models[best_name]
 
-    model_mape = float(
-        best_row["MAPE (%)"]
-    )
+forecast_df = forecast_next_24_hours(
+    df,
+    best_model,
+    holiday_override=holiday_override,
+    classes_on_weekdays=classes_on_weekdays,
+)
 
-    # -----------------------------------------------------
-    # KPI CARDS
-    # -----------------------------------------------------
+# -----------------------------------------------------
+# FORECAST KPIs
+# -----------------------------------------------------
 
+forecast_peak = float(
+    forecast_df["Predicted_Demand_kW"].max()
+)
+
+forecast_minimum = float(
+    forecast_df["Predicted_Demand_kW"].min()
+)
+
+forecast_average = float(
+    forecast_df["Predicted_Demand_kW"].mean()
+)
+
+peak_index = forecast_df[
+    "Predicted_Demand_kW"
+].idxmax()
+
+peak_time = forecast_df.loc[
+    peak_index,
+    "Timestamp"
+]
+
+daily_energy = float(
+    forecast_df["Predicted_Demand_kW"].sum()
+)
+
+peak_time_string = peak_time.strftime("%H:%M")
+
+# -----------------------------------------------------
+# MODEL ACCURACY
+# -----------------------------------------------------
+
+best_row = report_df[
+    report_df["Model"] == best_name
+].iloc[0]
+
+model_mape = float(
+    best_row["MAPE (%)"]
+)
+  
+# -----------------------------------------------------
+# KPI CARDS
+# -----------------------------------------------------
+
+st.markdown(
+    '<div class="section-title">'
+    'Campus Energy Overview'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+# First row
+c1, c2, c3 = st.columns(3)
+
+with c1:
     st.markdown(
-        '<div class="section-title">'
-        'Campus Energy Overview'
-        '</div>',
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                CURRENT LOAD
+            </div>
+            <div class="kpi-value">
+                {current_load:.1f} kW
+            </div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    c1, c2, c3, c4 = st.columns(4)
-
-    with c1:
-        st.markdown(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    Latest Load
-                </div>
-                <div class="kpi-value">
-                    {current_load:.1f} kW
-                </div>
+with c2:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                FORECAST PEAK
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with c2:
-        st.markdown(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    Average Load
-                </div>
-                <div class="kpi-value">
-                    {average_load:.1f} kW
-                </div>
+            <div class="kpi-value">
+                {forecast_peak:.1f} kW
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    with c3:
-        st.markdown(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    Maximum Recorded Load
-                </div>
-                <div class="kpi-value">
-                    {maximum_load:.1f} kW
-                </div>
+with c3:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                PEAK HOUR
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-value">
+                {peak_time_string}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    with c4:
-        st.markdown(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-title">
-                    Best Model MAPE
-                </div>
-                <div class="kpi-value">
-                    {model_mape:.2f}%
-                </div>
+# Second row
+c4, c5, c6 = st.columns(3)
+
+with c4:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                DAILY ENERGY
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div class="kpi-value">
+                {daily_energy:,.0f} kWh
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with c5:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                AVERAGE FORECAST
+            </div>
+            <div class="kpi-value">
+                {forecast_average:.1f} kW
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with c6:
+    st.markdown(
+        f"""
+        <div class="kpi-card">
+            <div class="kpi-title">
+                MODEL MAPE
+            </div>
+            <div class="kpi-value">
+                {model_mape:.2f}%
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # -----------------------------------------------------
     # DATA INFORMATION
@@ -443,15 +525,7 @@ try:
         unsafe_allow_html=True,
     )
 
-    best_model = final_models[best_name]
-
-    forecast_df = forecast_next_24_hours(
-        df,
-        best_model,
-        holiday_override=holiday_override,
-        classes_on_weekdays=classes_on_weekdays,
-    )
-
+    
     forecast_chart = forecast_df.set_index(
         "Timestamp"
     )[["Predicted_Demand_kW"]]
