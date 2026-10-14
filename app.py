@@ -26,67 +26,75 @@ st.markdown(
     """
     <style>
 
-    /* Main background */
-    .stApp {
-        background-color: #f5f7fb;
-    }
+   /* Main page text */
+body {
+    color: #1f2937 !important;
+}
 
-    /* Main title */
-    .main-title {
-        font-size: 42px;
-        font-weight: 800;
-        margin-bottom: 0px;
-    }
+/* Main title */
+.main-title {
+    color: #111827 !important;
+    font-weight: 800 !important;
+    font-size: 42px !important;
+}
 
-    .subtitle {
-        font-size: 18px;
-        color: #666;
-        margin-bottom: 25px;
-    }
+/* Subtitle */
+.subtitle {
+    color: #4b5563 !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+}
 
-    /* KPI cards */
-    .kpi-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        margin-bottom: 10px;
-    }
+/* Section headings */
+.section-title {
+    color: #111827 !important;
+    font-weight: 800 !important;
+    font-size: 24px !important;
+}
 
-    .kpi-title {
-        font-size: 14px;
-        color: #666;
-        font-weight: 600;
-    }
+/* KPI title */
+.kpi-title {
+    color: #374151 !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}
 
-    .kpi-value {
-        font-size: 28px;
-        font-weight: 800;
-        margin-top: 5px;
-    }
+/* KPI value */
+.kpi-value {
+    color: #111827 !important;
+    font-weight: 800 !important;
+    font-size: 30px !important;
+}
 
-    /* Section headings */
-    .section-title {
-        font-size: 25px;
-        font-weight: 750;
-        margin-top: 25px;
-        margin-bottom: 10px;
-    }
+/* Normal Streamlit text */
+.stMarkdown,
+.stText,
+p,
+label {
+    color: #374151 !important;
+}
 
-    /* Info box */
-    .info-box {
-        background-color: white;
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid #e5e7eb;
-        margin-bottom: 20px;
-    }
+/* Metric text */
+[data-testid="stMetricLabel"] {
+    color: #374151 !important;
+    font-weight: 700 !important;
+}
 
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+[data-testid="stMetricValue"] {
+    color: #111827 !important;
+    font-weight: 800 !important;
+}
+
+/* Sidebar text */
+section[data-testid="stSidebar"] {
+    color: #1f2937 !important;
+}
+
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
 
 # ---------------------------------------------------------
 # SIDEBAR
